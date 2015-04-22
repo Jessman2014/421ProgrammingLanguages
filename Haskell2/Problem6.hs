@@ -1,0 +1,2 @@
+fii = map.(*)
+--The second equation is not possible to convert to point-free style because the f variable is between the filter and map functions. This makes it difficult to move to the right and take out to convert to point-free style. Filter and map would have to be composed together similar to map and the multiplication function in the problem above. Using basic haskell techniques I was not able to compose filter and map so that I could omit all three parameters for filter and map.
