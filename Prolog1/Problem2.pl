@@ -21,5 +21,5 @@ schedule(S, R, T) :- enroll(S, C), where(C, R), when(C, T).
 usage(R, T) :- when(C, T), where(C, R).
 conflict(C1, C2) :- when(C1, T), when(C2, T), where(C1, R), where(C2, R).
 meet(S1, S2) :- enroll(S1, C), enroll(S2, C).
-meet(S1, S2) :- enroll(S1, C1), enroll(S2, C2), when(C1, T1), when(C2, T2), T1 is T2 - 1.
-meet(S1, S2) :- enroll(S1, C1), enroll(S2, C2), when(C1, T1), when(C2, T2), T1 is T2 + 1.
+meet(S1, S2) :- enroll(S1, C1), enroll(S2, C2), when(C1, T1), when(C2, T2), T1 is T2 - 1, where(C1, R), where(C2, R).
+meet(S1, S2) :- enroll(S1, C1), enroll(S2, C2), when(C1, T1), when(C2, T2), T1 is T2 + 1, where(C1, R), where(C2, R).
