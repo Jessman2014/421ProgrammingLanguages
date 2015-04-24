@@ -1,8 +1,13 @@
+undup(A,B) :- undup(A, B, []).
+undup([],[],_).
+undup([H|T],[H|Out],Seen) :- not(member(H,Seen)), undup(T,Out, [H|Seen]).
+undup([H|T],Out, Seen) :- member(H,Seen), undup(T,Out,Seen).
+
+remv(_, [], []).
+remv(X, [X|T], T1) :- remv(X, T, T1).
+remv(X, [H|T], [H|T1]) :- X \= H, remv(X, T, T1).
 undup([], []).
-undup([X], [X]).
-undup([H, J|T], [K, L|S]) :- H = K, K \= L, H = J, undup([J|T], [K, L|S]).
-undup([H, J|T], [K, L|S]) :- H = K, K \= L, H \= J, undup([J|T], [L|S]).
-undup([H, J|T], [X]) :- H = J, H = X, undup([J|T], [X]).
+undup(L, [H|T]) :- member(H, L), remv(H, L, Z), dup(Z, T).
 
 %sortList([X], [X]).
 %sortList([H,J|T], [K|S]) :- H =< J, H = K, sortList([J|T], S).
