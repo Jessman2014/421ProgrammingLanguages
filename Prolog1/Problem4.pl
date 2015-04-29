@@ -2,7 +2,8 @@ remv(_, [], []).
 remv(X, [X|T], T1) :- remv(X, T, T1).
 remv(X, [H|T], [H|T1]) :- X \= H, remv(X, T, T1).
 undup([], []).
-undup([H|L], [H|U]) :- remv(H, L, Z), undup(Z, U).
+undup([H,H|L],[H|U]) :- undup([H|L],[H|U]),!.
+undup([H|L], [H|U]) :- undup(L, U).
 
 sortedUnion([], L2, U) :- undup(L2, U).
 sortedUnion(L1, [], U) :- undup(L1, U).
