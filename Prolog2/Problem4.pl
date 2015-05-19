@@ -2,18 +2,21 @@ crossing([toRight(_, _), toLeft(_), toRight(_, _), toLeft(_), toRight(_, _)]).
 people([tom, elliot, vic, bill]).
 
 paddle(X, toLeft(X)).
-paddle(X, toRight(X, Y)).
-elliotPaddle(X, toLeft(X)).
-elliotPaddle(X, toRight(X, bill)).
+%paddle(elliot, toRight(elliot, bill)).
+%paddle(elliot, toRight(elliot, A)) :- A \= bill, fail, !.
+%paddle(X, toRight(X, _)) :- X \= elliot, X \= tom.
+paddle(X, toRight(X, _)).
 
-passenger(X, toRight(Y, X)).
-paddledOrPass(X, toRight(X, Y)).
-paddledOrPass(X, toRight(Y, X)).
-paddledLeft(X, toLeft(X)).
-notSamePerson(toRight(X, Y)) :- X \= Y.
+stayOnOneSide([toRight(A1, A2)], PeopleLeft) :- length(PeopleLeft, 2), member(A1, PeopleLeft), 
+	member(A2, PeopleLeft), A1 \= A2, !.
+stayOnOneSide([toRight(A1, A2), toLeft(A2)|T], PeopleLeft) :- member(A1, PeopleLeft), member(A2, PeopleLeft), 
+	delete(PeopleLeft, A1, Z), stayOnOneSide(T, Z), A1 \= A2.
+stayOnOneSide([toRight(A1, A2), toLeft(A1)|T], PeopleLeft) :- member(A1, PeopleLeft), member(A2, PeopleLeft),
+	delete(PeopleLeft, A2, Z), stayOnOneSide(T, Z), A1 \= A2.
 
 paddledTwice(A) :- crossing(Crossings),
 	people(People),
+	stayOnOneSide(Crossings, People),
 	member(A, People),
 	member(B, People),
 	member(C, People),
@@ -34,31 +37,5 @@ paddledTwice(A) :- crossing(Crossings),
 	H \= I,
 	A \= B,	A \= C, A \= D, 
 	B \= C,	B \= D,
-	C \= D,
-	member(J, Crossings),
-	elliotPaddle(elliot, J),
-	member(toLeft(tom), Crossings),
-	member(A1, People),
-	member(B1, People),
-	member(C1, People),
-	member(A2, Crossings),
-	member(B2, Crossings),
-	member(C2, Crossings),
-	A2 \= B2, A2 \= C2, B2 \= C2,
-	notSamePerson(A2),
-	notSamePerson(B2),
-	notSamePerson(C2),
-	passenger(A1, A2),
-	passenger(B1, B2),
-	passenger(C1, C2),
-	member(D2, Crossings),
-	member(E2, Crossings),
-	A2 \= D2, B2 \= D2, C2 \= D2, E2 \= D2,
-	A2 \= E2, B2 \= E2, C2 \= E2,
-	paddledLeft(D1, D2),
-	paddledLeft(E1, E2),
-	paddledOrPass(D1, K),
-	paddledOrPass(E1, L),
-	member(K, Crossings),
-	member(L, Crossings),
+	C \= D, !, 
 	print(Crossings).
